@@ -13,9 +13,9 @@ def ApiQuery(album, artist, headers):
     parsedAlbum = requests.utils.quote(album)
     parsedArtist = requests.utils.quote(artist)
     url = 'https://api.spotify.com/v1/search?'
-    query = f'q={parsedAlbum}album:{parsedAlbum}artist:{parsedArtist}&type=artist,track'
+    query = f'q={parsedAlbum}%2520album:{parsedAlbum}%2520artist:{parsedArtist}&type=artist,track'
     response = requests.get(url=url+query, headers=headers)
-    return response.text
+    return response
 
 run = True
 
@@ -27,8 +27,38 @@ if run:
 
 with open('RYMdata.txt', 'r') as arquivo:
     for query in arquivo:
+        i=0
+        l=0
+        albumDuration = 0 #album time duration (ms)
         (album, artist) = query.split(' - ')
         print('album:', album, '----->', artist)
         rawData = ApiQuery(album=album, artist=artist, headers=headers)
-        with open('ParsedRYMdata.txt', 'w') as escritor:
-            escritor.write(rawData)
+        data = rawData.json()
+
+        while data['artists']['items'][i]['name'] != artist:
+            i+=1
+        print('A pesquisa efetiva foi no elemento:', i)
+        genres = data['artists']['items'][i]['genres']
+        popularity = data['artists']['items'][i]['popularity']
+
+
+        while data['tracks']['items'][l]['album']['name'] != album:
+            l+=1
+        totaltracks = data['tracks']['items'][l]['album']['total_tracks']
+        checkList = list(range(totaltracks+1))
+
+        for j in range(20):
+            if data['tracks']['items'][j]['album']['name'] == album:
+                    trackNumber = data['tracks']['items'][j]['track_number']
+                    if trackNumber in checkList:
+                        albumDuration += data['tracks']['items'][j]['duration_ms']
+                        checkList.remove(trackNumber)
+
+        print('Duracao do album:', albumDuration)
+        print('Generos:', genres)
+        print('Popularidade:', popularity)
+        print('Total Tracks', totaltracks)
+
+
+        #with open('ParsedRYMdata.txt', 'w') as escritor:
+        #   escritor.write(rawData)
