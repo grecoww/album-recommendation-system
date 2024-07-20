@@ -21,23 +21,23 @@ run = True
 
 if run:
     data = GetApiToken()
-    print('access_token:', data[0], '\ntokenType:', data[1])
+    print('access_token:', data[0], '\ntokenType:', data[1], '\n')
     headers = {'Authorization': f'{data[1]}  {data[0]}'}
 
 
 with open('RYMdata.txt', 'r') as arquivo:
-    for query in arquivo:
+    for linha in arquivo:
         i=0
         l=0
         albumDuration = 0 #album time duration (ms)
-        (album, artist) = query.split(' - ')
+        (album, artist) = linha.strip().split(' - ')
         print('album:', album, '----->', artist)
         rawData = ApiQuery(album=album, artist=artist, headers=headers)
         data = rawData.json()
 
         while data['artists']['items'][i]['name'] != artist:
             i+=1
-        print('A pesquisa efetiva foi no elemento:', i)
+        print('A pesquisa efetiva foi no artista de index:', i)
         genres = data['artists']['items'][i]['genres']
         popularity = data['artists']['items'][i]['popularity']
 
@@ -45,6 +45,7 @@ with open('RYMdata.txt', 'r') as arquivo:
         while data['tracks']['items'][l]['album']['name'] != album:
             l+=1
         totaltracks = data['tracks']['items'][l]['album']['total_tracks']
+        releaseDate = data['tracks']['items'][l]['album']['release_date']
         checkList = list(range(totaltracks+1))
 
         for j in range(20):
@@ -54,10 +55,12 @@ with open('RYMdata.txt', 'r') as arquivo:
                         albumDuration += data['tracks']['items'][j]['duration_ms']
                         checkList.remove(trackNumber)
 
-        print('Duracao do album:', albumDuration)
+        print('Duracao do album:', albumDuration, '(ms)', 'ou', albumDuration/60000, '(min)')
         print('Generos:', genres)
         print('Popularidade:', popularity)
         print('Total Tracks', totaltracks)
+        print('Ano de lancamento:', releaseDate)
+        print()
 
 
         #with open('ParsedRYMdata.txt', 'w') as escritor:
