@@ -13,7 +13,7 @@ def ApiQuery(album, artist, headers):
     parsedAlbum = requests.utils.quote(album)
     parsedArtist = requests.utils.quote(artist)
     url = 'https://api.spotify.com/v1/search?'
-    query = f'q=album:{parsedAlbum}%20artist:{parsedArtist}&type=album'
+    query = f'q={parsedAlbum}album:{parsedAlbum}artist:{parsedArtist}&type=artist,track'
     response = requests.get(url=url+query, headers=headers)
     return response.text
 
@@ -30,4 +30,5 @@ with open('RYMdata.txt', 'r') as arquivo:
         (album, artist) = query.split(' - ')
         print('album:', album, '----->', artist)
         rawData = ApiQuery(album=album, artist=artist, headers=headers)
-        print(rawData)
+        with open('ParsedRYMdata.txt', 'w') as escritor:
+            escritor.write(rawData)
