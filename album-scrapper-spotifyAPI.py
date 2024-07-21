@@ -1,5 +1,6 @@
 import requests
 import env
+import csv
  
 def GetApiToken():
     authentication = f'grant_type=client_credentials&client_id={env.clientId}&client_secret={env.clientSecret}'
@@ -13,7 +14,7 @@ def ApiQuery(album, artist, headers):
     parsedAlbum = requests.utils.quote(album)
     parsedArtist = requests.utils.quote(artist)
     url = 'https://api.spotify.com/v1/search?'
-    query = f'q={parsedAlbum}%2520album:{parsedAlbum}%2520artist:{parsedArtist}&type=artist,track'
+    query = f'q={parsedArtist}%20{parsedAlbum}&type=album,artist,track&limit=30'
     response = requests.get(url=url+query, headers=headers)
     return response
 
@@ -25,43 +26,44 @@ if run:
     headers = {'Authorization': f'{data[1]}  {data[0]}'}
 
 
-with open('RYMdata.txt', 'r') as arquivo:
-    for linha in arquivo:
-        i=0
+with open('rym_list.csv', 'r', newline='', encoding='utf-8') as arquivo:
+    reader = csv.reader(arquivo)
+
+    for coluna in reader:
         l=0
+        i=0
         albumDuration = 0 #album time duration (ms)
-        (album, artist) = linha.strip().split(' - ')
+        artist = coluna[1]
+        album = coluna[2]
+
         print('album:', album, '----->', artist)
         rawData = ApiQuery(album=album, artist=artist, headers=headers)
         data = rawData.json()
+        try:
+            totaltracks = data['albums']['items'][l]['total_tracks']
+            releaseDate = data['albums']['items'][l]['release_date']
+            checkList = list(range(totaltracks+1))
 
-        while data['artists']['items'][i]['name'] != artist:
-            i+=1
-        print('A pesquisa efetiva foi no artista de index:', i)
-        genres = data['artists']['items'][i]['genres']
-        popularity = data['artists']['items'][i]['popularity']
+            genres = data['artists']['items'][i]['genres']
+            popularity = data['artists']['items'][i]['popularity']
 
 
-        while data['tracks']['items'][l]['album']['name'] != album:
-            l+=1
-        totaltracks = data['tracks']['items'][l]['album']['total_tracks']
-        releaseDate = data['tracks']['items'][l]['album']['release_date']
-        checkList = list(range(totaltracks+1))
+            for j in range(30):
+                if data['tracks']['items'][j]['album']['name'][:3].lower() == album.lower()[:3]:
+                        trackNumber = data['tracks']['items'][j]['track_number']
+                        if trackNumber in checkList:
+                            albumDuration += data['tracks']['items'][j]['duration_ms']
+                            checkList.remove(trackNumber)
+        except:
+            print('ALGO DEU ERRADO COM O ALBUM:', album, '---->', artist)
+            albumDuration=0
 
-        for j in range(20):
-            if data['tracks']['items'][j]['album']['name'] == album:
-                    trackNumber = data['tracks']['items'][j]['track_number']
-                    if trackNumber in checkList:
-                        albumDuration += data['tracks']['items'][j]['duration_ms']
-                        checkList.remove(trackNumber)
+        text = album+'--->'+str(albumDuration/60000)+'\n'
+        with open('rym_list_durations_revision.txt', 'a', encoding='utf-8') as arquivo:
+                arquivo.write(text)
 
         print('Duracao do album:', albumDuration, '(ms)', 'ou', albumDuration/60000, '(min)')
         print('Generos:', genres)
         print('Popularidade:', popularity)
-        print('Total Tracks', totaltracks)
         print('Ano de lancamento:', releaseDate)
         print()
-
-
-        #with open('ParsedRYMdata.txt', 'w') as escritor:
-        #   escritor.write(rawData)
