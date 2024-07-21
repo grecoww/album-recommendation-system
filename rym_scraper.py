@@ -10,7 +10,11 @@ PAGE_NUM = 25
 pos = 1
 script_dir = os.path.dirname(__file__)
 with open("rym_list.csv", "w", newline='', encoding="utf-8") as csvfile:
+    fieldnames = ['pos', 'artist', 'album', 'year', 'genre', 'second_genre',
+                                     'descriptor', 'average', 'ratings']
     listwriter = csv.writer(csvfile)
+
+    listwriter.writerow(fieldnames)
     for i in range(1, PAGE_NUM+1):
         filepath = os.path.join(script_dir, f"RYM_Pages\\{i}.html")
         with open(filepath, "r", encoding="utf-8") as page:
@@ -34,7 +38,7 @@ with open("rym_list.csv", "w", newline='', encoding="utf-8") as csvfile:
                 else:
                     artist_span = [e.span for e in artist_div.find_all('a') if e.span is not None]
                     for span in artist_span:
-                        if span.span is None: # TODO: more than one artist
+                        if span.span is None:
                             artist.append("!")
                             artist.append(f"{span.text.lstrip()}")
                         else:
@@ -59,7 +63,7 @@ with open("rym_list.csv", "w", newline='', encoding="utf-8") as csvfile:
                 ratings = stats_div.find('span', {"class":
                                          "page_charts_section_charts_item_details_ratings"}).find(
                                          'span', {"class": "full"}).text.strip().replace(",", "")
-                print(f"{pos} - {artist}: {album} ({average} - {ratings})")
+                #print(f"{pos} - {artist}: {album} ({average} - {ratings})")
                 listwriter.writerow([pos, artist, album, year, genre, second_genre,
                                      descriptor, average, ratings])
                 pos += 1
