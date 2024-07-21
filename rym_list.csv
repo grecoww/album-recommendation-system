@@ -1,3 +1,4 @@
+pos,artist,album,year,genre,second_genre,descriptor,average,ratings
 1,['Kendrick Lamar'],To Pimp a Butterfly,2015,"['Conscious Hip Hop', 'West Coast Hip Hop', 'Jazz Rap']","['Political Hip Hop', 'Neo-Soul', 'Funk', 'Poetry', 'Experimental Hip Hop']","['political', 'conscious', 'concept album', 'poetic', 'introspective', 'protest', 'urban', 'eclectic']",4.38,81305
 2,['Radiohead'],OK Computer,1997,"['Alternative Rock', 'Art Rock']","['Post-Britpop', 'Space Rock Revival']","['melancholic', 'anxious', 'alienation', 'futuristic', 'existential', 'lonely', 'atmospheric', 'cold']",4.28,105927
 3,['Radiohead'],In Rainbows,2007,"['Art Rock', 'Alternative Rock']","['Electronic', 'Dream Pop', 'Art Pop']","['lush', 'melancholic', 'introspective', 'mellow', 'bittersweet', 'atmospheric', 'warm', 'ethereal']",4.31,78890
