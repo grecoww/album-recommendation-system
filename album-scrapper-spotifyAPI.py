@@ -58,11 +58,12 @@ with open('rym_list.csv', 'r', newline='', encoding='utf-8') as arquivo:
             print('ALGO DEU ERRADO COM O ALBUM:', album, '---->', artist)
             albumDuration=0
 
-        text = album+'--->'+str(albumDuration/60000)+'\n'
-        with open('rym_list_durations_revision.txt', 'a', encoding='utf-8') as arquivo:
+        text = album+'--->'+str((albumDuration/60000)/totaltracks)+'\n'
+        with open('average-song-durations.txt', 'a', encoding='utf-8') as arquivo:
                 arquivo.write(text)
 
         print('Duracao do album:', albumDuration, '(ms)', 'ou', albumDuration/60000, '(min)')
+        print('Total tracks:', totaltracks)
         print('Generos:', genres)
         print('Popularidade:', popularity)
         print('Ano de lancamento:', releaseDate)
