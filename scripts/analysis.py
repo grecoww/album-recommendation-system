@@ -57,14 +57,14 @@ filepath = os.path.join(root_dir+'\data', "rym_list.csv")
 data = pd.read_csv(filepath)
 
 genre_count = sort_count(get_count(data["genre"], "genre"))
-genre_count.to_csv('data/counts/genre_count.csv')
+genre_count.to_csv(root_dir + '\data/counts/genre_count.csv')
 
 second_genre_count = sort_count(get_count(data["second_genre"], "genre"))
-second_genre_count.to_csv('data/counts/second_genre_count.csv')
+second_genre_count.to_csv(root_dir + '\data/counts/second_genre_count.csv')
 
 descriptor_count = sort_count(get_count(data["descriptor"], "descriptor"))
-descriptor_count.to_csv('data/counts/descriptor_count.csv')
+descriptor_count.to_csv(root_dir + '\data/counts/descriptor_count.csv')
 
 decade_count = sort_count(get_decade_count(data["year"], "year"))
-decade_count.to_csv('data/counts/decade_count.csv')
+decade_count.to_csv(root_dir + '\data/counts/decade_count.csv')
 
