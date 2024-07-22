@@ -48,8 +48,8 @@ def get_decade_count(df, data_type):
     count = pd.crosstab(new_df[f"{data_type}"], "appearances")
     return count
 
-script_dir = os.getcwd()
-filepath = os.path.join(script_dir+'\data', "rym_list.csv")
+root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
+filepath = os.path.join(root_dir+'\data', "rym_list.csv")
 data = pd.read_csv(filepath)
 
 genre_count = get_count(data["genre"], "genre")
