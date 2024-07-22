@@ -48,23 +48,23 @@ def get_decade_count(df, data_type):
     count = pd.crosstab(new_df[f"{data_type}"], "appearances")
     return count
 
+def sort_count(count_file):
+    count_sorted = count_file.sort_values(by='appearances', ascending=False)
+    return count_sorted
+
 root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
 filepath = os.path.join(root_dir+'\data', "rym_list.csv")
 data = pd.read_csv(filepath)
 
-genre_count = get_count(data["genre"], "genre")
-genre_count_sorted = genre_count.sort_values(by='appearances', ascending=False)
-genre_count_sorted.to_csv('data/counts/genre_count.csv')
+genre_count = sort_count(get_count(data["genre"], "genre"))
+genre_count.to_csv('data/counts/genre_count.csv')
 
-second_genre_count = get_count(data["second_genre"], "genre")
-second_genre_count_sorted = second_genre_count.sort_values(by='appearances', ascending=False)
-second_genre_count_sorted.to_csv('data/counts/second_genre_count.csv')
+second_genre_count = sort_count(get_count(data["second_genre"], "genre"))
+second_genre_count.to_csv('data/counts/second_genre_count.csv')
 
-descriptor_count = get_count(data["descriptor"], "descriptor")
-descriptor_count_sorted = descriptor_count.sort_values(by='appearances', ascending=False)
-descriptor_count_sorted.to_csv('data/counts/descriptor_count.csv')
+descriptor_count = sort_count(get_count(data["descriptor"], "descriptor"))
+descriptor_count.to_csv('data/counts/descriptor_count.csv')
 
-decade_count = get_decade_count(data["year"], "year")
-decade_count_sorted = decade_count.sort_values(by='appearances', ascending=False)
-decade_count_sorted.to_csv('data/counts/decade_count.csv')
+decade_count = sort_count(get_decade_count(data["year"], "year"))
+decade_count.to_csv('data/counts/decade_count.csv')
 
