@@ -14,8 +14,9 @@ columns = {"artist": 1,"year": 1,"genre": 1,"second_genre": 1,"descriptor": 1}
 
 weights = []
 
+
 for pos1 in range(1, 1001):
-    for pos2 in range(1, 1001):
+    for pos2 in range(pos1, 1001):
         if pos1 != pos2:
             weight = 0
             for column in columns:
@@ -35,14 +36,13 @@ for pos1 in range(1, 1001):
             weights.append(weight)
         else:
             weights.append(0)
-print(weights)
 
 
 
 node1 = []
 node2 = []
 for i in range(1,1001):
-    for j in range(1,1001):
+    for j in range(i,1001):
         node1.append(i)
         node2.append(j)
 
@@ -52,4 +52,6 @@ data = {
     'Weight': weights
 }
 graph_connections = pd.DataFrame(data)
-graph_connections.to_csv(root_dir + '\data\graph\graph_connections.csv', index=False)
+graph_connections_filtered = graph_connections[graph_connections['Weight'] > 0]
+
+graph_connections_filtered.to_csv(root_dir + '\data\graph\graph_connections.csv', index=False)
