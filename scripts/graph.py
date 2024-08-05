@@ -10,3 +10,6 @@ next(data, None)
 Graphtype = nx.Graph()
 
 G = nx.parse_edgelist(data, delimiter=',', create_using=Graphtype, nodetype=int, data=(('weight', float),))
+degree_centrality = G.degree(weight='weight')
+sorted_degrees = sorted(degree_centrality, key=lambda x: x[1])
+print(sorted_degrees)
