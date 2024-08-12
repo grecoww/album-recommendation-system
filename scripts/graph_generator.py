@@ -9,13 +9,16 @@ root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
 filepath = os.path.join(root_dir+'\data', "rym_list.csv")
 data = pd.read_csv(filepath)
 
-columns = {"artist": 1,"year": 1,"genre": 1,"second_genre": 1,"descriptor": 1}
+# columns = {"artist": 5,"year": 3,"genre": 4,"second_genre": 2,"descriptor": 1}
+# columns = {"artist": 5,"year": 3,"genre": 3,"second_genre": 0.8,"descriptor": 0.5}
+columns = {"artist": 8,"year": 5,"genre": 3,"second_genre": 0.8,"descriptor": 0.3}
 
 
 weights = []
 
 
 for pos1 in range(1, 1001):
+    print(pos1)
     for pos2 in range(pos1, 1001):
         if pos1 != pos2:
             weight = 0
@@ -32,7 +35,7 @@ for pos1 in range(1, 1001):
                         weight += columns[column]
                 if (data["genre"][pos1-1] == data["second_genre"][pos2-1] or
                     data["genre"][pos2-1] == data["second_genre"][pos1-1]):
-                    weight += columns["genre"]*columns["second_genre"]
+                    weight += columns["genre"]*columns["second_genre"]/2
             weights.append(weight)
         else:
             weights.append(0)
