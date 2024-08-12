@@ -1,0 +1,6 @@
+pandas==2.2.2
+matplotlib==3.9.1.post1
+netgraph==4.13.2
+networkx==3.3
+requests==2.32.2
+bs4==0.0.2
