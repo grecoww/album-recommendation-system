@@ -46,7 +46,6 @@ data_dict['clustering'] = to_vector(clustering)
 
 df = pd.DataFrame(data_dict).set_index('node')
 df.to_csv(os.path.join(root_dir, '.\data\graph\metrics.csv'))
-print(df)
 
 
 # This is the code for testing the graph visualization (not working for now)
@@ -69,4 +68,4 @@ node_color = {node: community_to_color[community_id] for node, community_id in n
 #       edge_layout='bundled', edge_layout_kwargs=dict(k=2000),
 # )
 
-plt.show()
+#plt.show()

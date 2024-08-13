@@ -18,7 +18,6 @@ weights = []
 
 
 for pos1 in range(1, 1001):
-    print(pos1)
     for pos2 in range(pos1, 1001):
         if pos1 != pos2:
             weight = 0
