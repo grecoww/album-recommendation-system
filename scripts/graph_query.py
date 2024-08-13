@@ -8,13 +8,22 @@ filepath = os.path.join(root_dir, 'data', 'rym_list.csv')
 data = open(filepath, "r", encoding='utf-8')
 df = pd.read_csv(data)
 
-def get_album_by_node(nodeArray):
-    albums = []
-    for line in df['pos']:
-        if line in nodeArray:
-            albums.append(df['album'][line-1])
-    return albums
-            
+"""
+out format: dict parsedInfo = {item1: set(infos), item2: set(infos)}
+"""
+
+def get_album_by_node(nodeArray, infoArray):
+    info = []
+    for item in infoArray:
+        for line in df['pos']:
+            if line in nodeArray:
+                info.append(make_array(df[item][line-1]))
+    parsedInfo = set()
+    for i in info:
+        for j in i:
+            parsedInfo.add(j)
+    return parsedInfo
+
 
 def get_album_by_genre(genreArray):
     albums = []
@@ -30,11 +39,9 @@ def get_album_by_genre(genreArray):
     return albums
 
             
-            
-
 
 albums = get_album_by_genre(['Conscious Hip Hop', 'Jazz Rap'])
-albums2 = get_album_by_node([1,2,3])
+albums2 = get_album_by_node([1,2,3], ['genre'])
 
 print(albums2)
 
