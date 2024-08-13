@@ -8,15 +8,7 @@ O objetivo deste projeto é analisar dados dos primeiros 1000 álbuns da lista `
 
 ## Instalação
 
-1. Clone o repositório:
-    ```sh
-    git clone https://github.com/seu-usuario/seu-repositorio.git
-    ```
-2. Navegue até o diretório do projeto:
-    ```sh
-    cd seu-repositorio
-    ```
-3. Instale as dependências:
+Para instalar as dependências:
     ```sh
     pip install -r requirements.txt
     ```
