@@ -38,4 +38,9 @@ def get_album_by_genre(genreArray):
         if isInGenreArray:
             albums.append(df['album'][index])
     #adicionar funcao para buscar por genero secundario????
-    return albums
+    return albums       
+
+albums = get_album_by_genre(['Conscious Hip Hop', 'Jazz Rap'])
+albums2 = get_info_by_node([1,2,3], ['genre', 'artist', 'album', 'year'])
+
+print(albums2)
