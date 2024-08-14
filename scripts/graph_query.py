@@ -12,17 +12,19 @@ df = pd.read_csv(data)
 out format: dict parsedInfo = {item1: set(infos), item2: set(infos)}
 """
 
-def get_album_by_node(nodeArray, infoArray):
-    info = []
+def get_info_by_node(nodeArray, infoArray):
+    info = dict()
     for item in infoArray:
+        item_info = []
         for line in df['pos']:
             if line in nodeArray:
-                info.append(make_array(df[item][line-1]))
-    parsedInfo = set()
-    for i in info:
-        for j in i:
-            parsedInfo.add(j)
-    return parsedInfo
+                item_info.append(make_array(df[item][line-1]))
+        parsedInfo = set()
+        for i in item_info:
+            for j in i:
+                parsedInfo.add(j)
+        info[item] = parsedInfo
+    return info
 
 
 def get_album_by_genre(genreArray):
@@ -41,7 +43,7 @@ def get_album_by_genre(genreArray):
             
 
 albums = get_album_by_genre(['Conscious Hip Hop', 'Jazz Rap'])
-albums2 = get_album_by_node([1,2,3], ['genre'])
+albums2 = get_album_by_node([1,2,3], ['genre', 'artist', 'album', 'year'])
 
 print(albums2)
 
