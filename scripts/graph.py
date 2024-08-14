@@ -20,32 +20,36 @@ Graphtype = nx.Graph()
 
 G = nx.parse_edgelist(data, delimiter=',', create_using=Graphtype, nodetype=int, data=(('weight', float),))
 
-degree_centrality = G.degree(weight='weight')
-closeness_centrality = nx.closeness_centrality(G)
-betweenness_centrality = nx.betweenness_centrality(G, weight='weight')
+# degree_centrality = G.degree(weight='weight')
+# closeness_centrality = nx.closeness_centrality(G)
+# betweenness_centrality = nx.betweenness_centrality(G, weight='weight')
 communities = nx.community.asyn_lpa_communities(G, weight='weight')
-triangles = nx.triangles(G)
-clustering = nx.clustering(G, weight='weight')
+# triangles = nx.triangles(G)
+# clustering = nx.clustering(G, weight='weight')
 # average_clustering = nx.average_clustering(G, weight='weight')
+# print(average_clustering)
 
-node_to_community = dict()
-for index, community in enumerate(communities):
-    for vertex in community:
-        node_to_community[vertex] = index
+for community in communities:
+    print(community)
 
-data_dict = {'node': [i for i in range(1,1001)]}
+# node_to_community = dict()
+# for index, community in enumerate(communities):
+#     for vertex in community:
+#         node_to_community[vertex] = index
 
-sorted_degrees = sorted(degree_centrality)
-data_dict['degree'] = [degree for _, degree in sorted_degrees]
+# data_dict = {'node': [i for i in range(1,1001)]}
 
-data_dict['closeness'] = to_vector(closeness_centrality)
-data_dict['betweenness'] = to_vector(betweenness_centrality)
-data_dict['community'] = to_vector(node_to_community)
-data_dict['triangles'] = to_vector(triangles)
-data_dict['clustering'] = to_vector(clustering)
+# sorted_degrees = sorted(degree_centrality)
+# data_dict['degree'] = [degree for _, degree in sorted_degrees]
 
-df = pd.DataFrame(data_dict).set_index('node')
-df.to_csv(os.path.join(root_dir, '.\data\graph\metrics.csv'))
+# data_dict['closeness'] = to_vector(closeness_centrality)
+# data_dict['betweenness'] = to_vector(betweenness_centrality)
+# data_dict['community'] = to_vector(node_to_community)
+# data_dict['triangles'] = to_vector(triangles)
+# data_dict['clustering'] = to_vector(clustering)
+
+# df = pd.DataFrame(data_dict).set_index('node')
+# df.to_csv(os.path.join(root_dir, '.\data\graph\metrics.csv'))
 
 
 # This is the code for testing the graph visualization (not working for now)
