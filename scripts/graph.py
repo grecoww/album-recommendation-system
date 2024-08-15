@@ -16,22 +16,25 @@ data = open(filepath, "r")
 next(data, None)
 Graphtype = nx.Graph()
 
-G = nx.parse_edgelist(data, delimiter=',', create_using=Graphtype, nodetype=int, data=(('weight', float),))
+G = nx.parse_edgelist(data, delimiter=',', create_using=Graphtype, nodetype=int, data=(('weight', float), ('reverse_weight', float)))
 
 degree_centrality = G.degree(weight='weight')
+average_path_length = nx.average_shortest_path_length(G, weight='reverse_weight')
 closeness_centrality = nx.closeness_centrality(G)
-betweenness_centrality = nx.betweenness_centrality(G, weight='weight')
-communities = nx.community.asyn_lpa_communities(G, weight='weight')
+betweenness_centrality = nx.betweenness_centrality(G, weight='reverse_weight')
+communities = nx.community.louvain_communities(G, weight='weight', resolution=2)
 triangles = nx.triangles(G)
 clustering = nx.clustering(G, weight='weight')
 average_clustering = nx.average_clustering(G, weight='weight')
-print(average_clustering)
 
-communities_filename = os.path.join(root_dir, '.\data\graph\communities.txt')
+print(f"Average path length: {average_path_length}")
+communities_filename = os.path.join(root_dir, '.\data\graph\general_metrics.txt')
 with open(communities_filename, 'w', encoding='utf-8') as f:
+    print(f"Average clustering: {average_clustering}", end='\n\n', file=f)
+    print("Communities:", file=f)
     for index, community in enumerate(communities):
         print(index, file=f)
-        print(get_info_by_node(community, ['genre', 'artist']), end='\n\n', file=f)
+        print(get_info_by_node(community, ['genre', 'second_genre', 'artist','descriptor']), end='\n\n', file=f)
 
 node_to_community = dict()
 for index, community in enumerate(communities):
@@ -50,7 +53,7 @@ data_dict['triangles'] = to_vector(triangles)
 data_dict['clustering'] = to_vector(clustering)
 
 df = pd.DataFrame(data_dict).set_index('node')
-df.to_csv(os.path.join(root_dir, '.\data\graph\metrics.csv'))
+df.to_csv(os.path.join(root_dir, '.\data\graph\vertex_metrics.csv'))
 
 # This is the code for testing the graph visualization (not working for now)
 # By switching to the default NetworkX draw function, it works, but it can't display the communities
