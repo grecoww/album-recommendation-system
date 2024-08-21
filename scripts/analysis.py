@@ -5,6 +5,8 @@ Read and analyze data from rym_list.csv
 import os
 import pandas as pd
 
+ROOT_DIR = os.path.join(os.path.dirname(__file__), os.pardir)
+
 def make_array(text):
     text = str(text)
     text = text.strip("[]")
@@ -52,19 +54,25 @@ def sort_count(count_file):
     count_sorted = count_file.sort_values(by='appearances', ascending=False)
     return count_sorted
 
-root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
-filepath = os.path.join(root_dir+'\data', "rym_list.csv")
+def sorted_csv(df, col):
+    sorted = df.sort_values(by=col)
+    sorted.to_csv(ROOT_DIR + f'\data\graph\sorted_metrics\sorted_{col}')
+
+filepath = os.path.join(ROOT_DIR, "\data\rym_list.csv")
 data = pd.read_csv(filepath)
 
 genre_count = sort_count(get_count(data["genre"], "genre"))
-genre_count.to_csv(root_dir + '\data/counts/genre_count.csv')
+genre_count.to_csv(ROOT_DIR + '\data/counts/genre_count.csv')
 
 second_genre_count = sort_count(get_count(data["second_genre"], "genre"))
-second_genre_count.to_csv(root_dir + '\data/counts/second_genre_count.csv')
+second_genre_count.to_csv(ROOT_DIR + '\data/counts/second_genre_count.csv')
 
 descriptor_count = sort_count(get_count(data["descriptor"], "descriptor"))
-descriptor_count.to_csv(root_dir + '\data/counts/descriptor_count.csv')
+descriptor_count.to_csv(ROOT_DIR + '\data/counts/descriptor_count.csv')
 
 decade_count = sort_count(get_decade_count(data["year"], "year"))
-decade_count.to_csv(root_dir + '\data/counts/decade_count.csv')
+decade_count.to_csv(ROOT_DIR + '\data/counts/decade_count.csv')
 
+graph_metrics = pd.read_csv(os.path.join(ROOT_DIR, '\data\graph\metrics.csv'))
+for col in graph_metrics:
+    sorted_csv(graph_metrics, col)
