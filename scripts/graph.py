@@ -53,7 +53,7 @@ data_dict['triangles'] = to_vector(triangles)
 data_dict['clustering'] = to_vector(clustering)
 
 df = pd.DataFrame(data_dict).set_index('node')
-df.to_csv(os.path.join(root_dir, '.\data\graph\vertex_metrics.csv'))
+df.to_csv(os.path.join(root_dir, '.\data\graph\metrics.csv'))
 
 # This is the code for testing the graph visualization (not working for now)
 # By switching to the default NetworkX draw function, it works, but it can't display the communities
