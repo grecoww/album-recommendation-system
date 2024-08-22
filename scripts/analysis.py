@@ -58,7 +58,7 @@ def sorted_csv(df, col):
     sorted = df.sort_values(by=col)
     sorted.to_csv(ROOT_DIR + f'\data\graph\sorted_metrics\sorted_{col}')
 
-filepath = os.path.join(ROOT_DIR, "\data\rym_list.csv")
+filepath = os.path.join(ROOT_DIR, 'data', 'rym_list.csv')
 data = pd.read_csv(filepath)
 
 genre_count = sort_count(get_count(data["genre"], "genre"))
@@ -73,6 +73,6 @@ descriptor_count.to_csv(ROOT_DIR + '\data/counts/descriptor_count.csv')
 decade_count = sort_count(get_decade_count(data["year"], "year"))
 decade_count.to_csv(ROOT_DIR + '\data/counts/decade_count.csv')
 
-graph_metrics = pd.read_csv(os.path.join(ROOT_DIR, '\data\graph\metrics.csv'))
+graph_metrics = pd.read_csv(os.path.join(ROOT_DIR, 'data', 'graph', 'metrics.csv'))
 for col in graph_metrics:
     sorted_csv(graph_metrics, col)
