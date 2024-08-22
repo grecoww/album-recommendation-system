@@ -1,0 +1,1 @@
+{"artist": 8,"year": 5,"genre": 3,"second_genre": 0.8,"descriptor": 0.3}
