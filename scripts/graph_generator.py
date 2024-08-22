@@ -6,7 +6,8 @@ import pandas as pd
 from analysis import make_array
 
 def generate_graph(columns, dir):
-    filepath = os.path.join(root_dir+'\data', "rym_list.csv")
+    root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
+    filepath = os.path.join(root_dir, 'data', 'rym_list.csv')
     data = pd.read_csv(filepath)
 
     weights = []
@@ -53,7 +54,7 @@ def generate_graph(columns, dir):
     graph_connections_filtered['Reverse_Weight'] = round((max_weight + 1) - graph_connections_filtered['Weight'], 1)
 
 
-    graph_connections_filtered.to_csv(dir + f'\graph_connections.csv', index=False)
+    graph_connections_filtered.to_csv(os.path.join(dir, 'graph_connections.csv'), index=False)
 
 def main():
     root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
@@ -61,7 +62,7 @@ def main():
     # columns = {"artist": 5,"year": 3,"genre": 4,"second_genre": 2,"descriptor": 1}
     # columns = {"artist": 5,"year": 3,"genre": 3,"second_genre": 0.8,"descriptor": 0.5}
     columns = {"artist": 8,"year": 5,"genre": 3,"second_genre": 0.8,"descriptor": 0.3}
-    generate_graph(columns, os.path.join(root_dir, '\data\graph'))
+    generate_graph(columns, os.path.join(root_dir, 'data', 'graph'))
 
 if __name__ == "__main__":
     main()
