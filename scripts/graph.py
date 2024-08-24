@@ -83,7 +83,7 @@ def main():
             for vertex in community: # col
                 node_to_community[vertex] = index
                 node_colors.append(index)
-
+          
     pos = nx.spring_layout(G, weight='weight', seed=7, k=0.33, iterations=100)
     nx.draw_networkx_nodes(G, pos=pos, node_size=4, node_color=node_colors)
     nx.draw_networkx_edges(G, pos=pos, alpha=0.05, node_size=4)
