@@ -26,6 +26,9 @@ def get_info_by_node(nodeArray, infoArray):
         info[item] = parsedInfo
     return info
 
+def get_album_by_node(node):
+    albums = []
+    return df['album'][node-1]
 
 def get_album_by_genre(genreArray):
     albums = []
