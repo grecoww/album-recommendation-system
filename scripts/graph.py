@@ -30,12 +30,6 @@ def to_vector(tuple_list):
     sorted_list = sorted(tuple_list.items())
     return [item for _, item in sorted_list]
 
-def get_similar(node):
-    distance = nx.single_source_dijkstra_path_length(G, node, weight='reverse_weight')
-    sorted_distance = sorted(distance, key=distance.get)
-    album_list = [get_album_by_node(node) for node in sorted_distance]
-    return album_list
-
 def calculate_metrics():
     density = nx.density(G)
     assortativity = nx.degree_assortativity_coefficient(G, weight='weight')
@@ -72,12 +66,19 @@ def calculate_metrics():
         for vertex in community:
             node_to_community[vertex] = index
 
-    data_dict = {'node': [i for i in range(1,1001)], 'album': [get_album_by_node(i) for i in range(1,1001)]}
+    data_dict = {'node': [i for i in range(1,1001)]}
     
     degree_centrality = G.degree(weight='weight')
     sorted_degrees = sorted(degree_centrality)
     data_dict['degree'] = [degree for _, degree in sorted_degrees]
-
+    
+    unweighted_degree = nx.degree(G)
+    sorted_uw_degree = sorted(unweighted_degree)
+    data_dict['unweighted_degree'] = [degree for _, degree in sorted_uw_degree]
+    
+    degree_centrality = nx.degree_centrality(G)
+    data_dict['degree_centrality'] = to_vector(degree_centrality)
+    
     data_dict['weighted_eccentricity'] = to_vector(weighted_eccentricity)
     data_dict['unweighted_eccentricity'] = to_vector(unweighted_eccentricity)
 
@@ -98,55 +99,61 @@ def calculate_metrics():
     triangles = nx.triangles(G)
     data_dict['triangles'] = to_vector(triangles)
 
+    data_dict['album'] = [get_album_by_node(i) for i in range(1,1001)]
+
     df = pd.DataFrame(data_dict).set_index('node')
     df.to_csv(os.path.join(root_dir, 'data', 'graph', 'vertex_metrics.csv'))
     print("finished metrics")
 
-def main():
-
-    album_similarities = []
-    for i in range(1,2):
-        album_similarities.append(get_similar(i))
-    (pd.DataFrame(album_similarities)).to_csv(os.path.join(root_dir, 'data', 'graph', 'album_similarities.csv'))
-    
-    calculate_metrics()
+def main():    
+    # calculate_metrics()
     communities = nx.community.louvain_communities(G, weight='weight', resolution=3, seed=72)
     communities_filename = os.path.join(root_dir, '.\data\graph\general_metrics.txt')
 
     node_to_community = dict()
     node_colors = []
 
-
     with open(communities_filename, 'a', encoding='utf-8') as f:
         # adicionar informações sobre as comunidades ao arquivo
-        modularity = nx.community.modularity(G, communities, weight='weight')
-        print(f"Communities: Modularity = {modularity}", file=f)
+        # modularity = nx.community.modularity(G, communities, weight='weight')
+        # print(f"Communities: Modularity = {modularity}", file=f)
         for index, community in enumerate(communities):
-            print(index, file=f)
-            print(community, file=f)
-            print(get_info_by_node(community, ['genre', 'second_genre', 'artist','descriptor']), end='\n\n', file=f)
+            # print(index, file=f)
+            # print(community, file=f)
+            # print(get_info_by_node(community, ['genre', 'second_genre', 'artist','descriptor']), end='\n\n', file=f)
 
             # colore os vértices com base na comunidade
             for vertex in community: # col
                 node_to_community[vertex] = index
                 node_colors.append(index)
 
+    degrees = [G.degree(n) for n in G.nodes()]
+    plt.figure()
+    plt.gca().set_alpha(0)
+    plt.hist(degrees)
+    plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
+    plt.savefig(os.path.join(root_dir, 'data', 'graph', 'histogram.png'), transparent=True)
+
     vis_data = open(vis_filepath, "r")
     next(vis_data, None)
     G_vis = nx.parse_edgelist(vis_data, delimiter=',', create_using=Graphtype, nodetype=int, data=(('weight', float), ('reverse_weight', float)))
     vis_data.close()
 
-    pos = nx.spring_layout(G_vis, weight='weight', seed=69, k=0.33, iterations=20)
-    curves = curved_edges(G_vis, pos, dist_ratio=0.05, bezier_precision=40, polarity='fixed')
+    pos = nx.spring_layout(G_vis, weight='weight', seed=69, k=0.30, iterations=20)
+    curves = curved_edges(G_vis, pos, dist_ratio=0.1, bezier_precision=40, polarity='fixed')
     
     weights = np.array([x[2]['weight'] for x in G.edges(data=True)])
-    widths = 2*np.log(weights/2)
-    lc = LineCollection(curves, color='k', alpha=0.03, linewidths=widths,)
+    widths = 0.12*np.log(weights/2)
+    lc = LineCollection(curves, color='#140b12', alpha=0.25, linewidths=widths,)
 
     plt.figure(figsize=(20,20))
     plt.gca().add_collection(lc)
+    plt.gca().set_facecolor('w')
     plt.tick_params(axis='both',which='both',bottom=False,left=False,labelbottom=False,labelleft=False)
-    nx.draw_networkx_nodes(G, pos, node_size=25, node_color=node_colors)
+    nx.draw_networkx_nodes(G, pos, node_size=55, node_color=node_colors)
+    plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
+    plt.savefig(os.path.join(root_dir, 'data', 'graph', 'graph.png'))
+    plt.savefig(os.path.join(root_dir, 'data', 'graph', 'graph.pdf'))
     plt.show()
 
     # nx.draw_networkx_nodes(G_vis, pos=pos, node_size=4, node_color=node_colors)
