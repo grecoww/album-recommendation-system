@@ -1,3 +1,8 @@
+'''
+Code by Geoff Sims (https://github.com/beyondbeneath),
+avaliable under the MIT license in the following GitHub repository: https://github.com/beyondbeneath/bezier-curved-edges-networkx
+'''
+
 import bezier
 import networkx as nx
 import numpy as np
