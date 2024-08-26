@@ -134,6 +134,13 @@ def main():
     plt.subplots_adjust(left=0.07, right=0.93, top=0.95, bottom=0.05)
     plt.savefig(os.path.join(root_dir, 'data', 'graph', 'histogram.png'), transparent=True)
 
+    weighted_degrees = [G.degree(n, weight='weight') for n in G.nodes()]
+    plt.figure()
+    plt.gca().set_alpha(0)
+    plt.hist(weighted_degrees)
+    plt.subplots_adjust(left=0.07, right=0.93, top=0.95, bottom=0.05)
+    plt.savefig(os.path.join(root_dir, 'data', 'graph', 'weighted_histogram.png'), transparent=True)
+
     vis_data = open(vis_filepath, "r")
     next(vis_data, None)
     G_vis = nx.parse_edgelist(vis_data, delimiter=',', create_using=Graphtype, nodetype=int, data=(('weight', float), ('reverse_weight', float)))
