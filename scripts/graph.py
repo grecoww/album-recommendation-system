@@ -131,7 +131,7 @@ def main():
     plt.figure()
     plt.gca().set_alpha(0)
     plt.hist(degrees)
-    plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
+    plt.subplots_adjust(left=0.07, right=0.93, top=0.95, bottom=0.05)
     plt.savefig(os.path.join(root_dir, 'data', 'graph', 'histogram.png'), transparent=True)
 
     vis_data = open(vis_filepath, "r")
