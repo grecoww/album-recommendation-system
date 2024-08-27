@@ -31,12 +31,66 @@ def get_closest(node):
 # Generate list with albums in the same community
 def get_in_community(node):
     community_index = node_to_community[node]
-    node_community = communities[community_index]
+    node_community = communities[community_index].copy()
     node_community.remove(node)
     return node_community
 
 def recommend(liked, disliked, recommended):
-    pass # Return recommended node
+    general_list = []
+    
+    for album in liked:
+        album_community_list = get_in_community(album)
+
+        updated_general_list = []
+        suggestion_list = get_closest(album)
+        filtered_suggestion_list = enumerate(reversed([album for album in suggestion_list if album not in recommended]), start=1)
+        for points1, album1 in filtered_suggestion_list:
+            found = False
+            for (points2, album2) in general_list:
+                if album1==album2:
+                    if album1 in album_community_list:
+                        total_points = 1.5*(points1+points2)
+                        updated_general_list.append((total_points, album1))
+                        found = True
+                        break
+                    else:    
+                        total_points = points1+points2
+                        updated_general_list.append((total_points, album1))
+                        found = True
+                        break
+            if not found:
+                updated_general_list.append((points1, album1))
+
+        general_list = updated_general_list
+
+    for album in disliked:
+        album_community_list = get_in_community(album)
+
+        updated_general_list = []
+        suggestion_list = get_closest(album)
+        filtered_suggestion_list = enumerate(reversed([album for album in suggestion_list if album not in recommended]), start=1)
+        for points1, album1 in filtered_suggestion_list:
+            found = False
+            for (points2, album2) in general_list:
+                if album1==album2:
+                    if album1 in album_community_list:
+                        total_points = 1.5*(points2-points1)
+                        updated_general_list.append((total_points, album1))
+                        break
+                    else:
+                        total_points = points2-points1
+                        updated_general_list.append((total_points, album1))
+                        break
+        general_list = updated_general_list
+
+
+    sorted_general_list = sorted(general_list, key=lambda x: x[0], reverse=True)
+    print(sorted_general_list) 
+    suggested_album = sorted_general_list[0][1]
+    return suggested_album
+            
+
+
 
 def main():
     recommended = set() # Set that stores all listened albums, so there's no repetition
@@ -44,22 +98,33 @@ def main():
     disliked = set()    # Set that stores all disliked albums, used to get better recommendations
 
     curr_node = int(input("Enter the position of the album you liked: "))
+    print(f"You liked the following album: {get_album_by_node(curr_node)}")
     recommended.add(curr_node)
     liked.add(curr_node)
 
     feedback = 1
-    while True: # Input 0 to end
-        # curr_node = recommend(liked, disliked, recommended)
-        print(f"Your recommendation: {get_album_by_node(curr_node)}")
+    Running = 1
+    while Running: # Input 0 to end
+        curr_node = recommend(liked, disliked, recommended)
         recommended.add(curr_node)
+        print(f"Your recommendation: {get_album_by_node(curr_node), curr_node}")
 
-        feedback = int(input("1: liked, 2: disliked, 0: exit\n"))
-        if feedback == 1:
-            liked.add(curr_node)
-        elif feedback == 2:
-            disliked.add(curr_node)
-
-    print(get_in_community(1))
+        try:
+            feedback = int(input("1: liked, 2: disliked, 0: exit\n"))
+            if feedback == 1:
+                liked.add(curr_node)
+                continue
+            elif feedback == 2:
+                disliked.add(curr_node)
+                continue
+            elif feedback == 0:
+                Running = 0
+            else:
+                print('Enter a valid input!\n')
+                continue
+        except:
+            print('Enter a valid input!\n')
+            continue
 
 if __name__ == "__main__":
     main()
