@@ -98,35 +98,34 @@ def main():
     liked = set()       # Set that stores all liked albums, used to get better recommendations 
     disliked = set()    # Set that stores all disliked albums, used to get better recommendations
 
-    print(get_closest(1))
-    # curr_node = int(input("Enter the position of the album you liked: "))
-    # print(f"You liked the following album: {get_album_by_node(curr_node)}")
-    # recommended.add(curr_node)
-    # liked.add(curr_node)
+    curr_node = int(input("Enter the position of the album you liked: "))
+    print(f"You liked the following album: {get_album_by_node(curr_node)}")
+    recommended.add(curr_node)
+    liked.add(curr_node)
 
-    # feedback = 1
-    # Running = 1
-    # while Running: # Input 0 to end
-    #     curr_node = recommend(liked, disliked, recommended)
-    #     recommended.add(curr_node)
-    #     print(f"Your recommendation: {get_album_by_node(curr_node)}")
+    feedback = 1
+    Running = 1
+    while Running: # Input 0 to end
+        curr_node = recommend(liked, disliked, recommended)
+        recommended.add(curr_node)
+        print(f"Your recommendation: {get_album_by_node(curr_node)}")
 
-    #     try:
-    #         feedback = int(input("1: liked, 2: disliked, 0: exit\n"))
-    #         if feedback == 1:
-    #             liked.add(curr_node)
-    #             continue
-    #         elif feedback == 2:
-    #             disliked.add(curr_node)
-    #             continue
-    #         elif feedback == 0:
-    #             Running = 0
-    #         else:
-    #             print('Enter a valid input!\n')
-    #             continue
-    #     except:
-    #         print('Enter a valid input!\n')
-    #         continue
+        try:
+            feedback = int(input("1: liked, 2: disliked, 0: exit\n"))
+            if feedback == 1:
+                liked.add(curr_node)
+                continue
+            elif feedback == 2:
+                disliked.add(curr_node)
+                continue
+            elif feedback == 0:
+                Running = 0
+            else:
+                print('Enter a valid input!\n')
+                continue
+        except:
+            print('Enter a valid input!\n')
+            continue
 
 if __name__ == "__main__":
     main()
