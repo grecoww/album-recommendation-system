@@ -26,6 +26,8 @@ def node_list_albums(node_list):
 # Generate list with closest albums
 def get_closest(node):
     distance = nx.single_source_dijkstra_path_length(G, node, weight='reverse_weight')
+    # tuple_list = [(weight, node) for node, weight in distance.items()]
+    # return sorted(tuple_list)
     return sorted(distance, key=distance.get)[1:]
 
 # Generate list with albums in the same community
