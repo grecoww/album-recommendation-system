@@ -100,12 +100,15 @@ def calculate_metrics():
     data_dict['triangles'] = to_vector(triangles)
 
     data_dict['album'] = [get_album_by_node(i) for i in range(1,1001)]
+    data_dict['artist'] = [get_info_by_node(i, ['artist']) for i in range(1,1001)]
+    data_dict['genre'] = [get_info_by_node(i, ['genre', 'second_genre']) for i in range(1,1001)]
 
     df = pd.DataFrame(data_dict).set_index('node')
     df.to_csv(os.path.join(root_dir, 'data', 'graph', 'vertex_metrics.csv'))
     print("finished metrics")
 
-def main():    
+def main():
+    # uncomment next line to calculate metrics 
     # calculate_metrics()
     communities = nx.community.louvain_communities(G, weight='weight', resolution=3, seed=72)
     communities_filename = os.path.join(root_dir, '.\data\graph\general_metrics.txt')
