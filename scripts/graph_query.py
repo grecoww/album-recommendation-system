@@ -7,7 +7,7 @@ filepath = os.path.join(root_dir, 'data', 'rym_list.csv')
 
 data = open(filepath, "r", encoding='utf-8')
 df = pd.read_csv(data)
-
+data.close()
 """
 out format: dict parsedInfo = {item1: set(infos), item2: set(infos)}
 """

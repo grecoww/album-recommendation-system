@@ -99,9 +99,9 @@ def calculate_metrics():
     triangles = nx.triangles(G)
     data_dict['triangles'] = to_vector(triangles)
 
-    data_dict['album'] = [get_album_by_node(i) for i in range(1,1001)]
-    data_dict['artist'] = [get_info_by_node(i, ['artist']) for i in range(1,1001)]
-    data_dict['genre'] = [get_info_by_node(i, ['genre', 'second_genre']) for i in range(1,1001)]
+    data_dict['artist'] = [list(get_info_by_node([i], ['artist']).values()) for i in range(1,1001)]
+    data_dict['genre'] = [list(get_info_by_node([i], ['genre']).values()) for i in range(1,1001)]
+    data_dict['second_genre'] = [list(get_info_by_node([i], ['second_genre']).values()) for i in range(1,1001)]
 
     df = pd.DataFrame(data_dict).set_index('node')
     df.to_csv(os.path.join(root_dir, 'data', 'graph', 'vertex_metrics.csv'))
