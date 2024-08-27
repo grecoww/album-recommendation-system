@@ -85,7 +85,6 @@ def recommend(liked, disliked, recommended):
 
 
     sorted_general_list = sorted(general_list, key=lambda x: x[0], reverse=True)
-    print(sorted_general_list) 
     suggested_album = sorted_general_list[0][1]
     return suggested_album
             
@@ -107,7 +106,7 @@ def main():
     while Running: # Input 0 to end
         curr_node = recommend(liked, disliked, recommended)
         recommended.add(curr_node)
-        print(f"Your recommendation: {get_album_by_node(curr_node), curr_node}")
+        print(f"Your recommendation: {get_album_by_node(curr_node)}")
 
         try:
             feedback = int(input("1: liked, 2: disliked, 0: exit\n"))
