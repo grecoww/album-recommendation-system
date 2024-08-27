@@ -74,7 +74,7 @@ def recommend(liked, disliked, recommended):
             for (points2, album2) in general_list:
                 if album1==album2:
                     if album1 in album_community_list:
-                        total_points = 1.5*(points2-points1)
+                        total_points = points2-(1.5*points1)
                         updated_general_list.append((total_points, album1))
                         break
                     else:
