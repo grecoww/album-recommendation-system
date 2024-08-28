@@ -50,14 +50,12 @@ def recommend(liked, disliked, recommended):
             for (points2, album2) in general_list:
                 if album1==album2:
                     if album1 in album_community_list:
-                        menor = min(points1, points2)
-                        maior = max(points1, points2)
-                        total_points = abs(maior-(1.5*menor))
+                        total_points = ((points1+points2)/2)/1.5
                         updated_general_list.append((total_points, album1))
                         found = True
                         break
                     else:
-                        total_points = abs(points2-points1)
+                        total_points = (points1+points2)/2
                         updated_general_list.append((total_points, album1))
                         found = True
                         break
@@ -73,22 +71,25 @@ def recommend(liked, disliked, recommended):
         suggestion_list = get_closest(album)
         filtered_suggestion_list = [(weight, album) for (weight, album) in suggestion_list if album not in recommended]
         for (points1, album1) in filtered_suggestion_list:
+            max_point = max(filtered_suggestion_list, key=lambda x: x[0])
             found = False
             for (points2, album2) in general_list:
                 if album1==album2:
                     if album1 in album_community_list:
-                        total_points = 1.5*(points1+points2)
+                        total_points = 1.5*((max_point[0]-points1)+points2)
                         updated_general_list.append((total_points, album1))
                         break
                     else:
-                        total_points = points1+points2
+                        total_points = ((max_point[0]-points1)+points2)
                         updated_general_list.append((total_points, album1))
                         break
         general_list = updated_general_list
 
 
-    sorted_general_list = sorted(general_list, key=lambda x: x[0])
+    sorted_general_list = sorted(general_list)
 
+    print(sorted_general_list)
+    
     suggested_album = sorted_general_list[0][1]
     return suggested_album
             
