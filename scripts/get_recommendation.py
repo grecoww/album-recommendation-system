@@ -50,11 +50,13 @@ def recommend(liked, disliked, recommended):
             for (points2, album2) in general_list:
                 if album1==album2:
                     if album1 in album_community_list:
-                        total_points = abs(points2-(1.5*points1))
+                        menor = min(points1, points2)
+                        maior = max(points1, points2)
+                        total_points = abs(maior-(1.5*menor))
                         updated_general_list.append((total_points, album1))
                         found = True
                         break
-                    else:    
+                    else:
                         total_points = abs(points2-points1)
                         updated_general_list.append((total_points, album1))
                         found = True
@@ -86,8 +88,6 @@ def recommend(liked, disliked, recommended):
 
 
     sorted_general_list = sorted(general_list, key=lambda x: x[0])
-
-    print(sorted_general_list)
 
     suggested_album = sorted_general_list[0][1]
     return suggested_album
