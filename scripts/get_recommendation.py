@@ -28,7 +28,6 @@ def get_closest(node):
     distance = nx.single_source_dijkstra_path_length(G, node, weight='reverse_weight')
     tuple_list = [(weight, node) for node, weight in distance.items()][1:]
     return sorted(tuple_list)
-    return sorted(distance, key=distance.get)[1:]
 
 # Generate list with albums in the same community
 def get_in_community(node):
@@ -45,18 +44,19 @@ def recommend(liked, disliked, recommended):
 
         updated_general_list = []
         suggestion_list = get_closest(album)
-        filtered_suggestion_list = enumerate(reversed([album for album in suggestion_list if album not in recommended]), start=1)
-        for points1, album1 in filtered_suggestion_list:
+        filtered_suggestion_list = [(weight, album) for (weight, album) in suggestion_list if album not in recommended]
+        for (points1, album1) in filtered_suggestion_list:
+            max_point = max(filtered_suggestion_list, key=lambda x: x[0])
             found = False
             for (points2, album2) in general_list:
                 if album1==album2:
                     if album1 in album_community_list:
-                        total_points = 1.5*(points1+points2)
+                        total_points = 1.5*((max_point[0]-points1)+points2)
                         updated_general_list.append((total_points, album1))
                         found = True
                         break
-                    else:    
-                        total_points = points1+points2
+                    else:
+                        total_points = ((max_point[0]-points1)+points2)
                         updated_general_list.append((total_points, album1))
                         found = True
                         break
@@ -70,23 +70,27 @@ def recommend(liked, disliked, recommended):
 
         updated_general_list = []
         suggestion_list = get_closest(album)
-        filtered_suggestion_list = enumerate(reversed([album for album in suggestion_list if album not in recommended]), start=1)
-        for points1, album1 in filtered_suggestion_list:
+        filtered_suggestion_list = [(weight, album) for (weight, album) in suggestion_list if album not in recommended]
+        for (points1, album1) in filtered_suggestion_list:
+            max_point = max(filtered_suggestion_list, key=lambda x: x[0])
             found = False
             for (points2, album2) in general_list:
                 if album1==album2:
                     if album1 in album_community_list:
-                        total_points = points2-(1.5*points1)
+                        total_points = (points2-(max_point[0]-points1))/1.5
                         updated_general_list.append((total_points, album1))
                         break
                     else:
-                        total_points = points2-points1
+                        total_points = (points2-(max_point[0]-points1))
                         updated_general_list.append((total_points, album1))
                         break
         general_list = updated_general_list
 
 
-    sorted_general_list = sorted(general_list, key=lambda x: x[0], reverse=True)
+    sorted_general_list = sorted(general_list, reverse=True)
+
+    print(sorted_general_list)
+    
     suggested_album = sorted_general_list[0][1]
     return suggested_album
             
@@ -103,12 +107,32 @@ def main():
     recommended.add(curr_node)
     liked.add(curr_node)
 
+    curr_node = int(input("Enter the position of the album you liked: "))
+    print(f"You liked the following album: {get_album_by_node(curr_node)}")
+    recommended.add(curr_node)
+    liked.add(curr_node)
+
+    curr_node = int(input("Enter the position of the album you liked: "))
+    print(f"You liked the following album: {get_album_by_node(curr_node)}")
+    recommended.add(curr_node)
+    liked.add(curr_node)
+
+    curr_node = int(input("Enter the position of the album you liked: "))
+    print(f"You liked the following album: {get_album_by_node(curr_node)}")
+    recommended.add(curr_node)
+    liked.add(curr_node)
+
+    curr_node = int(input("Enter the position of the album you liked: "))
+    print(f"You liked the following album: {get_album_by_node(curr_node)}")
+    recommended.add(curr_node)
+    liked.add(curr_node)
+
     feedback = 1
     Running = 1
     while Running: # Input 0 to end
         curr_node = recommend(liked, disliked, recommended)
         recommended.add(curr_node)
-        print(f"Your recommendation: {get_album_by_node(curr_node)}")
+        print(f"Your recommendation: {get_album_by_node(curr_node), curr_node}")
 
         try:
             feedback = int(input("1: liked, 2: disliked, 0: exit\n"))
