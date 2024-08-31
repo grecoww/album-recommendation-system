@@ -118,12 +118,14 @@ def main():
 
     with open(communities_filename, 'a', encoding='utf-8') as f:
         # adicionar informações sobre as comunidades ao arquivo
-        # modularity = nx.community.modularity(G, communities, weight='weight')
-        # print(f"Communities: Modularity = {modularity}", file=f)
+        modularity = nx.community.modularity(G, communities, weight='weight')
+        print(f"Communities: Modularity = {modularity}", file=f)
         for index, community in enumerate(communities):
-            # print(index, file=f)
-            # print(community, file=f)
-            # print(get_info_by_node(community, ['genre', 'second_genre', 'artist','descriptor']), end='\n\n', file=f)
+            print(f"{index}, size: {len(community)}", file=f)
+            print(community, file=f)
+            for element in get_info_by_node(community, ['genre', 'second_genre', 'artist','descriptor', 'year']).items():
+                print(element, file=f)
+            print(end='\n\n', file=f)
 
             # colore os vértices com base na comunidade
             for vertex in community: # col
@@ -159,10 +161,12 @@ def main():
     plt.figure(figsize=(20,20))
     plt.gca().add_collection(lc)
     plt.gca().set_facecolor('w')
+    plt.gca().set_alpha(0)
+    plt.box(on=None)
     plt.tick_params(axis='both',which='both',bottom=False,left=False,labelbottom=False,labelleft=False)
     nx.draw_networkx_nodes(G, pos, node_size=55, node_color=node_colors)
     plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
-    plt.savefig(os.path.join(root_dir, 'data', 'graph', 'graph.png'))
+    plt.savefig(os.path.join(root_dir, 'data', 'graph', 'graph.png'), transparent=True)
     plt.savefig(os.path.join(root_dir, 'data', 'graph', 'graph.pdf'))
     plt.show()
 
