@@ -14,3 +14,5 @@ Para instalar as dependências:
     ```sh
     pip install -r requirements.txt
     ```
+## Resultado final
+![graph](https://github.com/user-attachments/assets/51169344-faf4-4b2e-9e7c-d7bfe30dcf45)
