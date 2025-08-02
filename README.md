@@ -14,5 +14,6 @@ Para instalar as dependências:
     ```
     pip install -r requirements.txt
     ```
-## Resultado final (cada vértice é um álbum de música e as arestas são conectores de similaridade entre eles)
+## Resultado final
+(cada vértice é um álbum de música e as arestas são conectores de similaridade entre eles)
 ![graph](https://github.com/user-attachments/assets/51169344-faf4-4b2e-9e7c-d7bfe30dcf45)
