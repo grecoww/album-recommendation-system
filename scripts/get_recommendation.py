@@ -5,7 +5,7 @@ from graph_query import get_album_by_node
 
 # Load graph and generate communities
 root_dir = os.path.join(os.path.dirname(__file__), os.pardir)
-graph_path = os.path.join(root_dir, 'data', 'graph', 'graph_connections.csv')
+graph_path = os.path.join(root_dir, 'data', 'graph', 'graph_connections_filtered.csv')
 
 with open(graph_path, "r") as data:
     next(data, None)
