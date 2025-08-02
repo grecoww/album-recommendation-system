@@ -1,3 +1,7 @@
+"""
+This file uses the generated graph in `graph_generator.py` and extract interesting metrics + plot the final result graph
+"""
+
 import os
 import networkx as nx
 import pandas as pd
@@ -30,6 +34,10 @@ def to_vector(tuple_list):
     sorted_list = sorted(tuple_list.items())
     return [item for _, item in sorted_list]
 
+def sorted_csv(df, col):
+    sorted = df.sort_values(by=col)
+    sorted.to_csv(root_dir + f'\data\graph\sorted_metrics\sorted_{col}.csv')
+
 def calculate_metrics():
     density = nx.density(G)
     assortativity = nx.degree_assortativity_coefficient(G, weight='weight')
@@ -37,9 +45,6 @@ def calculate_metrics():
     average_path_length_unweighted = nx.average_shortest_path_length(G)
     communities = nx.community.louvain_communities(G, weight='weight', resolution=3, seed=72)
     average_clustering = nx.average_clustering(G, weight='weight')
-    # transitivity = nx.transitivity(G)
-    # sigma = nx.sigma(G)
-    # omega = nx.omega(G)
     weighted_eccentricity = nx.eccentricity(G, weight='reverse_weight')
     weighted_diameter = nx.diameter(G, weight='reverse_weight')
     unweighted_eccentricity = nx.eccentricity(G)
@@ -57,9 +62,6 @@ def calculate_metrics():
         print(f"Average clustering: {average_clustering}", end='\n\n', file=f)
         print(f"Weighted diameter: {weighted_diameter}", end='\n\n', file=f)
         print(f"Unweighted diameter: {unweighted_diameter}", end='\n\n', file=f)
-        # print(f"Transitivity: {transitivity}", end='\n\n', file=f)
-        # print(f"Sigma: {sigma}", end='\n\n', file=f)
-        # print(f"Omega: {omega}", end='\n\n', file=f)
 
     node_to_community = dict()
     for index, community in enumerate(communities):
@@ -108,7 +110,7 @@ def calculate_metrics():
     print("finished metrics")
 
 def main():
-    # uncomment next line to calculate metrics 
+    # uncomment next line to recalculate metrics 
     # calculate_metrics()
     communities = nx.community.louvain_communities(G, weight='weight', resolution=3, seed=72)
     communities_filename = os.path.join(root_dir, '.\data\graph\general_metrics.txt')
@@ -158,6 +160,13 @@ def main():
     widths = 0.12*np.log(weights/2)
     lc = LineCollection(curves, color='#140b12', alpha=0.25, linewidths=widths,)
 
+    #sorted vertices metrics
+
+    graph_metrics = pd.read_csv(os.path.join(root_dir, 'data', 'graph', 'vertex_metrics.csv'))
+    for col in graph_metrics:
+        sorted_csv(graph_metrics, col)
+
+    #visualization
     plt.figure(figsize=(20,20))
     plt.gca().add_collection(lc)
     plt.gca().set_facecolor('w')

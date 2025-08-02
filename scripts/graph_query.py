@@ -1,3 +1,7 @@
+"""
+This file has some useful functions that is used all over the repo
+"""
+
 import os
 from analysis import make_array
 import pandas as pd
@@ -42,6 +46,5 @@ def get_album_by_genre(genreArray):
     #adicionar funcao para buscar por genero secundario????
     return albums       
 
-# albums = get_album_by_genre(['Conscious Hip Hop', 'Jazz Rap'])
-# albums2 = get_info_by_node([132, 218, 403, 255, 607, 274, 124, 655, 151, 436, 93, 119, 80, 146, 598, 54, 186, 614, 284, 817, 261, 450, 476, 136], ['genre', 'artist', 'album', 'year'])
-# print(albums2)
+# albums1 = get_info_by_node([132, 218, 403, 255, 607, 274, 124, 655, 151, 436, 93, 119, 80, 146, 598, 54, 186, 614, 284, 817, 261, 450, 476, 136], ['genre', 'artist', 'album', 'year'])
+# albums2 = get_album_by_genre(['Conscious Hip Hop', 'Jazz Rap'])

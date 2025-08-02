@@ -88,8 +88,6 @@ def recommend(liked, disliked, recommended):
 
 
     sorted_general_list = sorted(general_list, reverse=True)
-
-    print(sorted_general_list)
     
     suggested_album = sorted_general_list[0][1]
     return suggested_album

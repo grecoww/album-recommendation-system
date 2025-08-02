@@ -2,6 +2,10 @@ import requests
 import env
 import csv
  
+# This api integration was a try to extract complementary information about each album on the rate your music album list
+# We wanted to extract information that was not provided by the rate your music site, like duration, popularity of this album in spotify, etc...
+# We failed with this implementaion, so here is just a memory of what we tried to do, you can just ignore this file.
+
 def GetApiToken():
     authentication = f'grant_type=client_credentials&client_id={env.clientId}&client_secret={env.clientSecret}'
     rawTokenInfo = requests.post(url='https://accounts.spotify.com/api/token', headers={'Content-Type': 'application/x-www-form-urlencoded'}, data=authentication)
